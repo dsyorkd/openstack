@@ -1,0 +1,24 @@
+#cloud-config
+groups:
+  - ubuntu
+  - docker
+users:
+  - name: ubuntu
+    shell: /bin/bash
+    sudo: ["ALL=(ALL) NOPASSWD:ALL"]
+    primary-group: ubuntu
+    groups: sudo, docker
+    lock_passwd: true
+    ssh-authorized-keys:
+      - ssh-rsa ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDszTuwEElZnBTb+nyEKBt2VxN9zw9Flmlvf9nVLypYDtPLUO29KSWWxiBQDy69Tc12w7zXUNT2Bm4ashhWOSRIfbXsaJDCI5asXo0KB6An1znCUJeEOBN3XqJp4D8IbCj4jc73voSEY0jcbtKbr7XhHqk255ZOS2PE4J8ddaQ/YPO3FOBaFirK7+w7+ztA6o7xpgXpy78DJ/lu4XuPeCPKW5V+5mXyTK/mKWHupz0yKTNYyg7+WYNKE1uz71dvXKpwTKLB7SKTkly+XgGFb2LyYAigWTVftTcarasF+2Z8iwhng/sIIbuEC1O3MUDUm737fzhDlJMWbtMYXoKSZuJR syork@Admin-LT-01
+apt:
+  sources:
+    docker:
+      keyid: "0EBFCD88"
+      source: "deb [arch=amd64] https://download.docker.com/linux/ubuntu bionic stable"
+package_upgrade: true
+packages:
+  - apt-transport-https
+  - docker-ce
+runcmd:
+  - "docker run -d --restart=unless-stopped -p 80:80 -p 443:443 rancher/rancher"
